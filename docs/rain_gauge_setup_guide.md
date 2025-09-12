@@ -39,10 +39,10 @@ sudo reboot
 git clone https://github.com/cksajil/rainfall_monitor.git
 
 # Set executable permission for setup.sh
-chmod a+x rainfall_monitor/src/setup.sh
+chmod a+x rainfall_monitor/setup.sh
 
 # run setup.sh
-bash rainfall_monitor/src/setup.sh
+bash rainfall_monitor/setup.sh
 ```
 * NOTE: There is an option for zerotier installation during initial setting up or you can do it manually by Following the instructions on [Zerotier for Raspberry Pi Tutorial](https://pimylifeup.com/raspberry-pi-zerotier/). Go to  [Zerotier](https://my.zerotier.com/) platform and login with the credentials shared via email/open project to monitor/connect to device IPs.
 
@@ -111,7 +111,7 @@ i2cdetect -y 1
 ### 11. Connect and Setup RFM95 Module to Raspberry Pi 4
 #### Hardware mapping 
 
-The complete WiringPi pin mapping can be seen [here](https://raw.githubusercontent.com/cksajil/rainfall_monitor/gitlab/src/lmic_rpi/raspberry_pi_wiring_gpio_pins.png) 
+The complete WiringPi pin mapping can be seen [here](https://raw.githubusercontent.com/cksajil/rainfall_monitor/gitlab/lmic_rpi/raspberry_pi_wiring_gpio_pins.png) 
 | WiringPi Pin | Function        | Physical Pin    |
 |--------------|-----------------|-----------------|
 | 0            | Reset           | 11              |
@@ -132,7 +132,7 @@ Download these from `API_Keys` folder in `SWSICFOSS`  Google Drive.
 ### 13. Edit device details in config file
 ```bash
 # open config.yaml
-nano /home/pi/raingauge/src/config/config.yaml
+nano /home/pi/raingauge/config/config.yaml
 
 # edit device name based on names in infulxdb or lora key files
 eg: 
@@ -155,7 +155,7 @@ you can do this in many ways
  
 ```bash
 # Append Python script execution command to .bashrc file 
-echo "python3 /home/pi/raingauge/src/daq_pi.py" >> ~/.bashrc
+echo "python3 /home/pi/raingauge/daq_pi.py" >> ~/.bashrc
 
 # Reboot the device
 sudo reboot

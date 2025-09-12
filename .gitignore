@@ -21,8 +21,8 @@ saved_TF_model/
 *.tflite
 
 # Ignore Influxdb API credentials
-src/config/influxdb_api.yaml
-src/config/lorawan_keys.yaml
+config/influxdb_api.yaml
+config/lorawan_keys.yaml
 
 
 # IDE specific

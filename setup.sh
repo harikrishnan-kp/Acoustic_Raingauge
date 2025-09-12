@@ -199,7 +199,7 @@ cd WiringPi
 cd ~/raingauge/src/lmic_rpi/examples/ttn-abp-send 
 make
 # ading path to system variables
-sed -i '$a export PATH="$PATH:/home/pi/raingauge/src/lmic_rpi/examples/ttn-abp-send"' ~/.bashrc
+sed -i '$a export PATH="$PATH:/home/pi/raingauge/lmic_rpi/examples/ttn-abp-send"' ~/.bashrc
 source ~/.bashrc
 }
 
