@@ -22,6 +22,8 @@
     * find different use cases for audio and mech data time frame changes
     * find solution for processing audio data lies in two different mech.time frame
     * create python code to find details of change in logging interval in acoustic and pi.mech csv file
-        * find max,min and avg value of logging intervals in both cases 
+        * find max,min and avg value of logging intervals in both cases
+* Add a GitHub CLI to emulate Raspberry Pi and run inference tests for PR validation.
+* Use multithreading to improve inference speed
 ## errors
 source ~/.bashrc : command is not working as expected
