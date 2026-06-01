@@ -5,6 +5,12 @@ from utils.helper import load_config
 import subprocess
 
 
+def send_data(config, mm_hat, solar_V, battery_V, solar_I, battery_I):
+    if config["communication"] == "LORAWAN":
+        send_data_via_lorawan(mm_hat, solar_V, battery_V, solar_I, battery_I)
+    else:
+        send_data_via_internet(mm_hat, solar_V, battery_V, solar_I, battery_I)
+
 def send_data_via_internet(rain, solar_V, battery_V, solar_I, battery_I: float) -> bool:
     """
     function to write data to influxdb using internet

@@ -5,12 +5,11 @@ from os import path, listdir
 import RPi.GPIO as GPIO
 from datetime import datetime, timedelta
 from utils.estimate import estimate_rainfall, load_estimate_model
-from utils.connectivity import send_data_via_internet, send_data_via_lorawan
+from utils.connectivity import send_data
 from plugins.battery_monitor import setup_serial_connection, preprocess_dataframe
 from plugins.moisture_sensor import read_moisture_sensor
 from utils.helper import time_stamp_fnamer, load_config, delete_files
 from utils.dir import create_folder
-
 
 def record_audio(file_path, duration, file_format, resolution, sampling_rate):
     subprocess.call(
@@ -56,13 +55,6 @@ def log_time_remaining(logger, end_time):
 def write_rain_data_to_csv(result_data, log_dir, rain_log_filename):
     result_df = pd.DataFrame(result_data)
     result_df.to_csv(path.join(log_dir, rain_log_filename), index=False)
-
-
-def send_data(config, mm_hat, solar_V, battery_V, solar_I, battery_I):
-    if config["communication"] == "LORAWAN":
-        send_data_via_lorawan(mm_hat, solar_V, battery_V, solar_I, battery_I)
-    else:
-        send_data_via_internet(mm_hat, solar_V, battery_V, solar_I, battery_I)
 
 
 def main():
