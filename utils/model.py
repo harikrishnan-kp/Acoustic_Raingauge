@@ -1,8 +1,7 @@
 import os
 
 from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import LSTM, Dense, Reshape, Input
+from keras.layers import Conv2D, MaxPooling2D, LSTM, Dense, Reshape, Input
 
 from .helper import config
 from .dir import get_weights_dir
