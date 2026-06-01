@@ -4,7 +4,8 @@ import pandas as pd
 from os import path, listdir
 import RPi.GPIO as GPIO
 from datetime import datetime, timedelta
-from utils.estimate import estimate_rainfall, load_estimate_model
+from utils.estimate import estimate_rainfall
+from utils.model import load_estimate_model
 from utils.connectivity import send_data
 from plugins.battery_monitor import setup_serial_connection, preprocess_dataframe
 from plugins.moisture_sensor import read_moisture_sensor
@@ -67,8 +68,7 @@ def main():
     end_time = datetime.now() + timedelta(hours=record_hours)
     min_threshold = config["min_threshold"]
     moisture_threshold = config["moisture_threshold"]
-    infer_model_path = path.join(config["infer_model_dir"],config["infer_model_name"])
-    infer_model = load_estimate_model(infer_model_path)
+    infer_model = load_estimate_model(config["infer_model_name"])
     # serial commuication setup for battery monitoring
     ser = setup_serial_connection(config["uart_port"], config["baudrate"])
     locations = []
