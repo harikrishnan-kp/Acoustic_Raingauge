@@ -2,7 +2,8 @@ import csv
 from os import path
 import RPi.GPIO as GPIO
 from datetime import datetime
-from utils.helper import load_config, create_folder, time_stamp_fnamer
+from utils.helper import load_config, time_stamp_fnamer
+from utils.dir import create_folder
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 from requests.exceptions import ConnectionError

@@ -1,14 +1,13 @@
 import yaml
 from os import path,makedirs,remove
+from .dir import get_config_dir
 
 
 def load_config(config_name: str) -> dict:
     """
     A function to load and return config file in YAML format.
-    assuming relative path of config
     """
-    config_path = path.join(path.dirname(path.dirname(path.abspath(__file__))),"config")
-    with open(path.join(config_path, config_name)) as file:
+    with open(path.join(get_config_dir(), config_name)) as file:
         config = yaml.safe_load(file)
     return config
 
@@ -23,13 +22,6 @@ def time_stamp_fnamer(tstamp) -> str:
     current_time = "_".join([chour, cmin, csec, cmilli])
     current_date_time_name = "_".join([current_date, current_time])
     return current_date_time_name
-
-def create_folder(directory: str) -> None:
-    """
-    Function to create a folder in a location if it does not exist
-    """
-    if not path.exists(directory):
-        makedirs(directory)
 
 def delete_files(file_paths):
     """
