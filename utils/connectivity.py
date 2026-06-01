@@ -1,8 +1,10 @@
+import subprocess
+
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 from requests.exceptions import ConnectionError
+
 from utils.helper import load_config
-import subprocess
 
 
 def send_data(config, mm_hat, solar_V, battery_V, solar_I, battery_I):
