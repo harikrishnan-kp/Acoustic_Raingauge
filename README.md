@@ -4,7 +4,7 @@
 ## Introduction
 Rainfall, also known as precipitation, is crucial for environmental stability. Accurate precipitation monitoring is vital for weather forecasting and creating early flood warning systems. In this project we have developed an acoustic rain gauge that estimates rainfall by using sound as input data.
 
-![Experiment Setup](https://raw.githubusercontent.com/cksajil/rainfall_monitor/gitlab/docs/images/experiment_setup.jpeg)
+<img src="https://raw.githubusercontent.com/cksajil/rainfall_monitor/gitlab/docs/images/experiment_setup.jpeg" alt="Experiment Setup" width="500"/>
 
 **Figure 1:** Experiment setup
 
@@ -19,17 +19,11 @@ The setup guide can be found [here](https://github.com/cksajil/rainfall_monitor/
 
 
 ## Components used
-#### Sensor Used
-1. [USB Mic, Jieli Technology UACDemoV1.0](https://www.amazon.in/USB-Microphone/s?k=USB+Microphone)
-<img src="https://images.meesho.com/images/products/293053361/m8ldc_512.webp" width="250"/>
-
 #### Data Acquisition Devices (DAQs)
-1. [Davis AeroCone 6466M Rain Gauge](https://www.amazon.de/-/en/Davis-AeroCone-6466M-Gauge-Sensor/dp/B08629NFVG) - The mechanical rain gauge used as a reference for comparing rainfall against acoustic readings.
-<img src="https://m.media-amazon.com/images/I/612KqYGrL7L._AC_SX466_.jpg" width="250"/>
-
+1. [USB Mic, Jieli Technology UACDemoV1.0](https://www.amazon.in/USB-Microphone/s?k=USB+Microphone)
+2. [Davis AeroCone 6466M Rain Gauge](https://www.amazon.de/-/en/Davis-AeroCone-6466M-Gauge-Sensor/dp/B08629NFVG) - The mechanical rain gauge used as a reference for comparing rainfall against acoustic readings.
+#### Processing device
 2. [Raspberry Pi](https://en.wikipedia.org/wiki/Raspberry_Pi) - Used as a DAQ device for high-resolution and high-sampling-rate audio recording.
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Raspberry_Pi_4_Model_B_-_Side.jpg/1200px-Raspberry_Pi_4_Model_B_-_Side.jpg" alt="Raspberry Pi" width="400"/>
-
 
 
 ## Data Collection
