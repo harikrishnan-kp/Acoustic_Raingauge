@@ -1,4 +1,3 @@
-import logging
 from os import path, listdir
 from datetime import datetime, timedelta
 import subprocess
@@ -13,6 +12,8 @@ from utils.model import load_estimate_model
 from utils.connectivity import send_data
 from utils.helper import time_stamp_fnamer, load_config, delete_files
 from utils.dir import create_folder
+from utils.logging import initialize_logging, log_time_remaining, write_rain_data_to_csv
+
 
 
 def record_audio(file_path, duration, file_format, resolution, sampling_rate):
@@ -30,35 +31,6 @@ def record_audio(file_path, duration, file_format, resolution, sampling_rate):
             file_path,
         ]
     )
-
-
-def initialize_logging(log_dir, audio_log_filename, start_time, total_samples):
-    create_folder(log_dir)
-    logging.basicConfig(
-        filename=path.join(log_dir, audio_log_filename),
-        filemode="a+",
-        format="%(message)s",
-    )
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-    logger.info("*******************************************************")
-    logger.info(f"Started data logging at {start_time}\n")
-    logger.info(f"Total number of samples to be recorded: {total_samples}\n")
-    return logger
-
-
-def log_time_remaining(logger, end_time):
-    time_left = end_time - datetime.now()
-    days = time_left.days
-    hours, remainder = divmod(time_left.seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    log_message = f"Time left: {days} days {hours} hours {minutes} minutes and {seconds} seconds\n"
-    logger.info(log_message)
-
-
-def write_rain_data_to_csv(result_data, log_dir, rain_log_filename):
-    result_df = pd.DataFrame(result_data)
-    result_df.to_csv(path.join(log_dir, rain_log_filename), index=False)
 
 
 def main():
