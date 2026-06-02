@@ -16,19 +16,21 @@ import time
 from Adafruit_ADS1x15 import ADS1115
 
 
-def read_moisture_sensor(channel=0, gain=1):
-    adc = ADS1115()
-    try:
-        moisture_value = adc.read_adc(channel, gain)
-    except Exception as e:
-        moisture_value = None
-    return moisture_value
+class MoistureSensor:
+    def __init__(self, channel=0, gain=1):
+        self.adc = ADS1115()
+        self.channel = channel
+        self.gain = gain
+
+    def get_data(self):
+        return self.adc.read_adc(self.channel, self.gain)
 
 
 if __name__ == "__main__":
+    sensor = MoistureSensor()
     while True:
-        value = read_moisture_sensor()
-        if value:
+        value = sensor.get_data()
+        if value is not None:
             print(f"Raw value: {value}")
         else:
             print(f"Cannot read moisture sensor {value}")
