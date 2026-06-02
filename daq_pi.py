@@ -3,12 +3,10 @@ from datetime import datetime, timedelta
 import subprocess
 
 import pandas as pd
-import RPi.GPIO as GPIO
 
 from plugins.battery_monitor import setup_serial_connection, preprocess_dataframe
 from plugins.moisture_sensor import read_moisture_sensor
-from utils.estimate import estimate_rainfall
-from utils.model import load_estimate_model
+from utils.model import load_model, estimate_rainfall
 from utils.connectivity import send_data
 from utils.helper import time_stamp_fnamer, load_config, delete_files
 from utils.logging import initialize_logging, log_time_remaining, write_rain_data_to_csv
@@ -41,7 +39,7 @@ def main():
     end_time = datetime.now() + timedelta(hours=record_hours)
     min_threshold = config["min_threshold"]
     moisture_threshold = config["moisture_threshold"]
-    infer_model = load_estimate_model(config["infer_model_name"])
+    infer_model = load_model(config["infer_model_name"])
     # serial commuication setup for battery monitoring
     ser = setup_serial_connection(config["uart_port"], config["baudrate"])
     locations = []
