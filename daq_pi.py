@@ -4,8 +4,7 @@ import subprocess
 
 import pandas as pd
 
-from plugins.battery_monitor import BatteryMonitoring
-from plugins.moisture_sensor import read_moisture_sensor
+from plugins import BatteryMonitor, MoistureSensor
 from core.model import load_model, estimate_rainfall
 from core.connectivity import send_data
 from utils.helper import time_stamp_fnamer, load_config, delete_files
@@ -40,8 +39,8 @@ def main():
     min_threshold = config["min_threshold"]
     moisture_threshold = config["moisture_threshold"]
     infer_model = load_model(config["infer_model_name"])
-    battery = BatteryMonitoring()
-
+    battery = BatteryMonitor()
+    moisture_sensor = MoistureSensor()
     db_counter, rain = 0, 0
     locations = []
     result_data = []
@@ -82,7 +81,7 @@ def main():
                     db_counter += 1
 
                     # reading moisture sensor
-                    moisture = read_moisture_sensor()
+                    moisture = moisture_sensor.get_data()
 
                     # reading battery parameters
                     # solar_V, battery_V, solar_I, battery_I = 17.2, 15.2, 1.5, 2.2
@@ -121,7 +120,7 @@ def main():
                     mm_hat = estimate_rainfall(infer_model, locations)
                     # logger.info("Estimated rainfall: ", mm_hat)
                     locations.clear()
-                    moisture = read_moisture_sensor() # reading moisture sensor
+                    moisture = moisture_sensor.get_data() # reading moisture sensor
                     result_data.append(
                         {
                             "time_stamp": dt_now,
