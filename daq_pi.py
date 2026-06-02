@@ -11,9 +11,7 @@ from utils.estimate import estimate_rainfall
 from utils.model import load_estimate_model
 from utils.connectivity import send_data
 from utils.helper import time_stamp_fnamer, load_config, delete_files
-from utils.dir import create_folder
 from utils.logging import initialize_logging, log_time_remaining, write_rain_data_to_csv
-
 
 
 def record_audio(file_path, duration, file_format, resolution, sampling_rate):
@@ -102,7 +100,6 @@ def main():
 
         else:
             logger = initialize_logging(
-                config["log_dir"],
                 config["audio_log_filename"],
                 datetime.now(),
                 int(record_hours * (3600 / config["sample_duration_sec"])),
@@ -133,9 +130,7 @@ def main():
                             "moisture": moisture,
                         }
                     )
-                    write_rain_data_to_csv(
-                        result_data, config["log_dir"], config["rain_log_filename"]
-                    )
+                    write_rain_data_to_csv(result_data, config["rain_log_filename"])
                     rain += mm_hat
                     db_counter += 1
 

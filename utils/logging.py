@@ -2,11 +2,12 @@ import logging
 from os import path
 from datetime import datetime
 
+from utils.dir import get_logs_dir
 
-def initialize_logging(log_dir, audio_log_filename, start_time, total_samples):
-    create_folder(log_dir)
+
+def initialize_logging(audio_log_filename, start_time, total_samples):
     logging.basicConfig(
-        filename=path.join(log_dir, audio_log_filename),
+        filename=path.join(get_logs_dir(), audio_log_filename),
         filemode="a+",
         format="%(message)s",
     )
@@ -27,6 +28,6 @@ def log_time_remaining(logger, end_time):
     logger.info(log_message)
 
 
-def write_rain_data_to_csv(result_data, log_dir, rain_log_filename):
+def write_rain_data_to_csv(result_data, rain_log_filename):
     result_df = pd.DataFrame(result_data)
-    result_df.to_csv(path.join(log_dir, rain_log_filename), index=False)
+    result_df.to_csv(path.join(get_logs_dir(), rain_log_filename), index=False)
