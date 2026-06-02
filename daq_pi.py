@@ -6,8 +6,8 @@ import pandas as pd
 
 from plugins.battery_monitor import setup_serial_connection, preprocess_dataframe
 from plugins.moisture_sensor import read_moisture_sensor
-from utils.model import load_model, estimate_rainfall
-from utils.connectivity import send_data
+from core.model import load_model, estimate_rainfall
+from core.connectivity import send_data
 from utils.helper import time_stamp_fnamer, load_config, delete_files
 from utils.logging import initialize_logging, log_time_remaining, write_rain_data_to_csv
 from utils.dir import get_data_dir
