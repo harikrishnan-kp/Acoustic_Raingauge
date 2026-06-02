@@ -4,7 +4,7 @@ import struct
 import time
 
 
-class BatteryMonitoring:
+class BatteryMonitor:
     def __init__(self, port="/dev/ttyS0", baudrate=9600):
         self.ser = self.setup_serial_connection(port, baudrate)
 
