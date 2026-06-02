@@ -4,7 +4,7 @@ import subprocess
 
 import pandas as pd
 
-from plugins.battery_monitor import setup_serial_connection, preprocess_dataframe
+from plugins.battery_monitor import BatteryMonitoring
 from plugins.moisture_sensor import read_moisture_sensor
 from core.model import load_model, estimate_rainfall
 from core.connectivity import send_data
@@ -32,17 +32,17 @@ def record_audio(file_path, duration, file_format, resolution, sampling_rate):
 
 def main():
     config = load_config("config.yaml")
-    db_counter, rain = 0, 0
     DB_write_interval = config["DB_writing_interval_min"]
     num_subsamples = config["infer_inetrval_sec"] // config["sample_duration_sec"]
     record_hours = config["record_hours"]
-    field_deployed = config["field_deployed"]
     end_time = datetime.now() + timedelta(hours=record_hours)
+    field_deployed = config["field_deployed"]
     min_threshold = config["min_threshold"]
     moisture_threshold = config["moisture_threshold"]
     infer_model = load_model(config["infer_model_name"])
-    # serial commuication setup for battery monitoring
-    ser = setup_serial_connection(config["uart_port"], config["baudrate"])
+    battery = BatteryMonitoring()
+    
+    db_counter, rain = 0, 0
     locations = []
     result_data = []
     data_dir = get_data_dir()
@@ -86,7 +86,7 @@ def main():
 
                     # reading battery parameters
                     # solar_V, battery_V, solar_I, battery_I = 17.2, 15.2, 1.5, 2.2
-                    solar_V, battery_V, solar_I, battery_I = (preprocess_dataframe(ser))
+                    solar_V, battery_V, solar_I, battery_I = (battery.get_dataframe())
 
                     # sending data to DB
                     if db_counter == DB_write_interval:
@@ -135,7 +135,7 @@ def main():
 
                     # reading battery parameters
                     # solar_V, battery_V, solar_I, battery_I = 17.2, 15.2, 1.5, 2.2
-                    solar_V, battery_V, solar_I, battery_I = (preprocess_dataframe(ser))
+                    solar_V, battery_V, solar_I, battery_I = (battery.get_dataframe())
                     
                     # sending data to DB
                     if db_counter == DB_write_interval:
