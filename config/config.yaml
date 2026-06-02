@@ -17,9 +17,6 @@ seq_len: 1368000
 davis_log_filename: davis_label.csv
 davis_interrupt_pin: 13
 davis_log_interval_sec: 180
-# battery monitoring
-uart_port: /dev/ttyS0
-baudrate: 9600
 # general
 device_name: rainpi_test
 device_location: greenfield tvm
