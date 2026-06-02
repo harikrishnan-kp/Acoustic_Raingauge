@@ -41,7 +41,7 @@ def main():
     moisture_threshold = config["moisture_threshold"]
     infer_model = load_model(config["infer_model_name"])
     battery = BatteryMonitoring()
-    
+
     db_counter, rain = 0, 0
     locations = []
     result_data = []
@@ -82,7 +82,7 @@ def main():
                     db_counter += 1
 
                     # reading moisture sensor
-                    moisture = read_moisture_sensor(channel=0, gain=1)
+                    moisture = read_moisture_sensor()
 
                     # reading battery parameters
                     # solar_V, battery_V, solar_I, battery_I = 17.2, 15.2, 1.5, 2.2
@@ -121,7 +121,7 @@ def main():
                     mm_hat = estimate_rainfall(infer_model, locations)
                     # logger.info("Estimated rainfall: ", mm_hat)
                     locations.clear()
-                    moisture = read_moisture_sensor(channel=0, gain=1) # reading moisture sensor
+                    moisture = read_moisture_sensor() # reading moisture sensor
                     result_data.append(
                         {
                             "time_stamp": dt_now,
