@@ -1,16 +1,19 @@
-import csv
 from os import path
-import RPi.GPIO as GPIO
 from datetime import datetime
-from utils.helper import load_config, time_stamp_fnamer
-from utils.dir import create_folder
+import csv
+
+import RPi.GPIO as GPIO
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 from requests.exceptions import ConnectionError
 
+from utils.helper import load_config, time_stamp_fnamer
+from utils.dir import create_folder, get_logs_dir
+
+
 dt_start = datetime.now()
 config = load_config("config.yaml")
-session_dir = path.join(config["log_dir"], time_stamp_fnamer(dt_start))
+session_dir = path.join(get_logs_dir(), time_stamp_fnamer(dt_start))
 create_folder(session_dir)
 interrupt_pin = config["davis_interrupt_pin"]
 logging_interval = config["davis_log_interval_sec"]

@@ -1,6 +1,4 @@
 # directories and logs
-data_dir: /home/pi/raingauge/data/
-log_dir: /home/pi/raingauge/logs/
 audio_log_filename: audio_recording_log.txt
 rain_log_filename: estimated_rainfall.csv
 infer_model_dir: /home/pi/raingauge/model/

@@ -10,6 +10,7 @@ from utils.model import load_model, estimate_rainfall
 from utils.connectivity import send_data
 from utils.helper import time_stamp_fnamer, load_config, delete_files
 from utils.logging import initialize_logging, log_time_remaining, write_rain_data_to_csv
+from utils.dir import get_data_dir
 
 
 def record_audio(file_path, duration, file_format, resolution, sampling_rate):
@@ -44,7 +45,7 @@ def main():
     ser = setup_serial_connection(config["uart_port"], config["baudrate"])
     locations = []
     result_data = []
-    
+    data_dir = get_data_dir()
 
     try:
         if field_deployed:
@@ -53,7 +54,7 @@ def main():
                 dt_now = datetime.now()
                 print(f"Recording sample number {i} on {dt_now}")
                 audio_fname = time_stamp_fnamer(dt_now) + ".wav"
-                location = path.join(config["data_dir"], audio_fname)
+                location = path.join(data_dir, audio_fname)
                 record_audio(
                     location,
                     config["sample_duration_sec"],
@@ -67,11 +68,11 @@ def main():
                     mm_hat = estimate_rainfall(infer_model, locations) # estimating rainfall
                     print("Estimated rainfall: ", mm_hat)
 
-                    files_and_directories = listdir(config["data_dir"])
+                    files_and_directories = listdir(data_dir)
                     files_to_delete = [
-                        path.join(config["data_dir"], f)
+                        path.join(data_dir, f)
                         for f in files_and_directories
-                        if path.isfile(path.join(config["data_dir"], f))
+                        if path.isfile(path.join(data_dir, f))
                     ]
 
                     delete_files(files_to_delete)
@@ -106,7 +107,7 @@ def main():
                 dt_now = datetime.now()
                 logger.info(f"Recording sample number {i} on {dt_now}")
                 audio_fname = time_stamp_fnamer(dt_now) + ".wav"
-                location = path.join(config["data_dir"], audio_fname)
+                location = path.join(data_dir, audio_fname)
                 record_audio(
                     location,
                    config["sample_duration_sec"],
