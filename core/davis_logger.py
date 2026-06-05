@@ -1,0 +1,125 @@
+from os import path
+from datetime import datetime
+import csv
+
+import RPi.GPIO as GPIO
+import influxdb_client
+from influxdb_client.client.write_api import SYNCHRONOUS
+from requests.exceptions import ConnectionError
+
+from utils.helper import load_config, time_stamp_fnamer
+from utils.dir import create_folder, get_logs_dir
+
+
+class DavisRainGauge:
+
+    def __init__(self):
+        self.dt_start = datetime.now()
+        self.config = load_config("config.yaml")
+        self.session_dir = path.join(get_logs_dir(), time_stamp_fnamer(self.dt_start))
+        create_folder(self.session_dir)
+
+        self.interrupt_pin = self.config["davis_interrupt_pin"]
+        self.logging_interval = self.config["davis_log_interval_sec"]
+
+        self.Bucket_size_mm = 0.2
+        self.count = 0
+        self.count_lock = threading.Lock()
+        self._setup_gpio()
+
+    def _setup_gpio(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(interrupt_pin, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
+        GPIO.add_event_detect(interrupt_pin, GPIO.RISING, callback=bucket_tipped, bouncetime=50)
+
+    def reset_count(self):
+        with self.count_lock:
+            self.count = 0
+    
+    def bucket_tipped(self, channel):
+        with self.count_lock:
+            self.count += 1
+            
+            # workaround for error tipps
+            if self.count > 50:
+                self.reset_count()
+
+        print("Bucket Tipped")
+    
+    def write_influxdb(self, rain: float) -> bool:
+        try:
+            name = "rainpi_mech"
+            location = "greenfield tvm"
+
+            influxdb_config = load_config("influxdb_api.yaml")
+
+            client = influxdb_client.InfluxDBClient(
+                url=influxdb_config["url"],
+                token=influxdb_config[name]["token"],
+                org=influxdb_config["org"],
+                timeout=30_000,
+            )
+
+            write_api = client.write_api(write_options=SYNCHRONOUS)
+            point = (
+                influxdb_client.Point("pi_davis_raingauge")
+                .tag("location", location)
+                .field("rain", rain)
+            )
+
+            write_api.write(
+                bucket=influxdb_config[name]["bucket"],
+                org=influxdb_config["org"],
+                record=point,
+            )
+
+            client.close()
+            return True
+
+        except ConnectionError as exc:
+            print(f"Connection failed: {exc}")
+            return False
+
+    def save_csv(self, timestamp, rainfall):
+        csv_path = path.join(self.session_dir, self.config["davis_log_filename"])
+        file_exists = path.isfile(csv_path)
+
+        with open(csv_path, "a", newline="") as csv_file:
+            writer = csv.writer(csv_file)
+
+            if not file_exists:
+                writer.writerow(["time", "rainfall"])
+
+            writer.writerow([timestamp, rainfall])
+
+    def calculate_rainfall(self):
+        with self.count_lock:
+            rainfall = self.count * self.Bucket_size_mm
+
+    def run(self):
+        log_count = 1
+
+        try:
+            while True:
+                dt_now = datetime.now()
+                elapsed_time = dt_now - self.dt_start
+
+                if elapsed_time.seconds % self.logging_interval == 0:
+                    if log_count == 0:
+                        rainfall = self.calculate_rainfall(dt_now)
+                        self.reset_count()
+                        self.write_influxdb(rainfall)
+                        self.save_csv(dt_now, rainfall)
+                        log_count = 1
+                else:
+                    log_count = 0
+
+        except KeyboardInterrupt:
+            print("Stopping rain gauge")
+
+        finally:
+            GPIO.cleanup()
+
+
+if __name__ == "__main__":
+    DavisRainGauge().run()
