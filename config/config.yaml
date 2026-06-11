@@ -13,10 +13,6 @@ stft_shape: [None, 1, 1025, 2672]
 infer_inetrval_sec: 180
 infer_model_name: seq_stft_enc3.hdf5
 seq_len: 1368000
-# davis
-davis_log_filename: davis_label.csv
-davis_interrupt_pin: 13
-davis_log_interval_sec: 180
 # general
 device_name: rainpi_test
 device_location: greenfield tvm

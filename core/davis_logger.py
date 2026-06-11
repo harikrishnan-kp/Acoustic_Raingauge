@@ -16,7 +16,6 @@ class DavisRainGauge:
 
     def __init__(self, interrupt_pin: int = 13, logging_interval: int = 180):
         self.dt_start = datetime.now()
-        self.config = load_config("config.yaml")
         self.session_dir = path.join(get_logs_dir(), time_stamp_fnamer(self.dt_start))
         create_folder(self.session_dir)
 
@@ -95,7 +94,7 @@ class DavisRainGauge:
                     rainfall = self.calculate_rainfall()
                     self.reset_count()
                     self.write_influxdb(rainfall)
-                    save_csv(now, rainfall, self.config["davis_log_filename"], self.session_dir)
+                    save_csv(now, rainfall, "davis_label.csv", self.session_dir)
                     next_log_time += timedelta(seconds=self.logging_interval)
                     
         except KeyboardInterrupt:
