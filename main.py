@@ -6,7 +6,7 @@ import pandas as pd
 
 from plugins import BatteryMonitor, MoistureSensor
 from core.model import RainfallEstimator
-from core.davis_logger import DavisRainGauge
+from core.mech_raingauge import DavisRainGauge
 from core.connectivity import send_data
 from utils.helper import time_stamp_fnamer, delete_files, config
 from utils.logging import initialize_logging, log_time_remaining, write_rain_data_to_csv
