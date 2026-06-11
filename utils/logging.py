@@ -31,3 +31,15 @@ def log_time_remaining(logger, end_time):
 def write_rain_data_to_csv(result_data, rain_log_filename):
     result_df = pd.DataFrame(result_data)
     result_df.to_csv(path.join(get_logs_dir(), rain_log_filename), index=False)
+
+
+def save_csv(self, time, rain, file_name, session_dir):
+    file_exists = path.isfile(path.join(session_dir, file_name))
+
+    with open(csv_path, "a", newline="") as csv_file:
+        writer = csv.writer(csv_file)
+
+        if not file_exists:
+            writer.writerow(["time", "rainfall"])
+
+        writer.writerow([time, rain])

@@ -9,6 +9,7 @@ from requests.exceptions import ConnectionError
 
 from utils.helper import load_config, time_stamp_fnamer
 from utils.dir import create_folder, get_logs_dir
+from utils.logging import save_csv
 
 
 class DavisRainGauge:
@@ -80,18 +81,6 @@ class DavisRainGauge:
             print(f"Connection failed: {exc}")
             return False
 
-    def save_csv(self, timestamp, rainfall):
-        csv_path = path.join(self.session_dir, self.config["davis_log_filename"])
-        file_exists = path.isfile(csv_path)
-
-        with open(csv_path, "a", newline="") as csv_file:
-            writer = csv.writer(csv_file)
-
-            if not file_exists:
-                writer.writerow(["time", "rainfall"])
-
-            writer.writerow([timestamp, rainfall])
-
     def calculate_rainfall(self):
         with self.count_lock:
             return self.count * self.Bucket_size_mm
@@ -106,7 +95,7 @@ class DavisRainGauge:
                     rainfall = self.calculate_rainfall()
                     self.reset_count()
                     self.write_influxdb(rainfall)
-                    self.save_csv(now, rainfall)
+                    save_csv(now, rainfall, self.config["davis_log_filename"], self.session_dir)
                     next_log_time += timedelta(seconds=self.logging_interval)
                     
         except KeyboardInterrupt:
