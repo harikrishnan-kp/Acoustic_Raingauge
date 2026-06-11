@@ -13,14 +13,14 @@ from utils.dir import create_folder, get_logs_dir
 
 class DavisRainGauge:
 
-    def __init__(self):
+    def __init__(self, interrupt_pin: int = 13, logging_interval: int = 180):
         self.dt_start = datetime.now()
         self.config = load_config("config.yaml")
         self.session_dir = path.join(get_logs_dir(), time_stamp_fnamer(self.dt_start))
         create_folder(self.session_dir)
 
-        self.interrupt_pin = self.config["davis_interrupt_pin"]
-        self.logging_interval = self.config["davis_log_interval_sec"]
+        self.interrupt_pin = interrupt_pin
+        self.logging_interval = logging_interval
 
         self.Bucket_size_mm = 0.2
         self.count = 0
@@ -94,26 +94,21 @@ class DavisRainGauge:
 
     def calculate_rainfall(self):
         with self.count_lock:
-            rainfall = self.count * self.Bucket_size_mm
+            return self.count * self.Bucket_size_mm
 
     def run(self):
-        log_count = 1
+        next_log_time = datetime.now() + timedelta(seconds=self.logging_interval)
 
         try:
             while True:
-                dt_now = datetime.now()
-                elapsed_time = dt_now - self.dt_start
-
-                if elapsed_time.seconds % self.logging_interval == 0:
-                    if log_count == 0:
-                        rainfall = self.calculate_rainfall(dt_now)
-                        self.reset_count()
-                        self.write_influxdb(rainfall)
-                        self.save_csv(dt_now, rainfall)
-                        log_count = 1
-                else:
-                    log_count = 0
-
+                now = datetime.now()
+                if now >= next_log_time:
+                    rainfall = self.calculate_rainfall()
+                    self.reset_count()
+                    self.write_influxdb(rainfall)
+                    self.save_csv(now, rainfall)
+                    next_log_time += timedelta(seconds=self.logging_interval)
+                    
         except KeyboardInterrupt:
             print("Stopping rain gauge")
 
