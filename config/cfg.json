@@ -1,0 +1,41 @@
+{
+    "acoustic": {
+        "name": "rain pi test",
+        "location": "somewhere on earth",
+        "communication": "LORAWAN",
+
+        "influxdb": {
+            "url": "",
+            "org": "",
+            "bucket": "",
+            "token": ""
+        },
+
+        "lorawan": {
+            "dev_addr": "",
+            "nwk_skey": "",
+            "app_skey": "",
+            "led_pin": 25
+        }
+    },
+
+    "mechanical": {
+        "name": "mech pi test",
+        "location": "somewhere on earth",
+        "communication": "LORAWAN",
+
+        "influxdb": {
+            "url": "",
+            "org": "",
+            "bucket": "",
+            "token": ""
+        },
+        
+        "lorawan": {
+            "dev_addr": "",
+            "nwk_skey": "",
+            "app_skey": "",
+            "led_pin": 25
+        }
+    }
+}
